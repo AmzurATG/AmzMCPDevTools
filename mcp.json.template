@@ -1,0 +1,172 @@
+{
+  "servers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"],
+      "type": "stdio",
+      "disabled": false
+    },
+    
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "type": "stdio",
+      "disabled": false
+    },
+   
+    "redis-cache": {
+      "command": "uvx",
+      "args": ["redis-mcp-server", "--url", "redis://localhost:6379"],
+      "env": {
+        "REDIS_HOST": "localhost",
+        "REDIS_PORT": "6379"
+      },
+      "type": "stdio",
+      "disabled": true,
+      "comment": "Enable only if Redis is installed and running locally"
+    },
+    
+    "postgres-diagnostics": {
+      "command": "npx",
+      "args": ["-y", "@henkey/postgres-mcp-server"],
+      "env": {
+        "DATABASE_URL": "<YOUR_POSTGRESQL_CONNECTION_STRING>"
+      },
+      "type": "stdio",
+      "disabled": true,
+      "comment": "Replace <YOUR_POSTGRESQL_CONNECTION_STRING> with: postgresql://username:password@host:5432/database"
+    },
+    
+    "lighthouse": {
+      "command": "npx",
+      "args": ["-y", "@danielsogl/lighthouse-mcp"],
+      "type": "stdio",
+      "disabled": false,
+      "timeout": 120,
+      "comment": "Timeout increased to 120s for performance audits"
+    },
+  
+    "sequentialThinking": {
+      "command": "uvx",
+      "args": ["sequential-thinking-mcp"],
+      "description": "Process flow and sequence modeling server for state management and event tracing.",
+      "env": {},
+      "type": "stdio",
+      "disabled": false
+    },
+    
+    "vitest": {
+      "command": "npx",
+      "args": ["-y", "@djankies/vitest-mcp"],
+      "disabled": true,
+      "autoApprove": [],
+      "type": "stdio",
+      "comment": "Enable if your project uses Vitest for testing"
+    },
+    
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "<YOUR_SUPABASE_ACCESS_TOKEN>"
+      },
+      "type": "stdio",
+      "disabled": true,
+      "comment": "Get token from: https://app.supabase.com → Account Preferences → Access Tokens"
+    },
+    
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "type": "stdio",
+      "disabled": false
+    },
+    
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "<YOUR_POSTGRES_CONNECTION_STRING>"],
+      "type": "stdio",
+      "disabled": true,
+      "comment": "Alternative PostgreSQL server. Replace <YOUR_POSTGRES_CONNECTION_STRING> with connection string"
+    },
+    
+    "kroki": {
+      "command": "npx",
+      "args": ["-y", "@tkoba1974/mcp-kroki"],
+      "env": {},
+      "type": "stdio",
+      "disabled": false
+    },
+    
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "<ABSOLUTE_PATH_TO_DIRECTORY>"],
+      "type": "stdio",
+      "disabled": true,
+      "comment": "Replace <ABSOLUTE_PATH_TO_DIRECTORY> with paths you want AI to access. Add multiple paths as separate args. Example: '/home/user/projects' or 'C:/Users/Name/Documents'"
+    },
+   
+    "awslabs.aws-diagram-mcp-server": {
+      "disabled": true,
+      "timeout": 90,
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "tool",
+        "run",
+        "--from",
+        "awslabs.aws-diagram-mcp-server",
+        "awslabs-aws-diagram-mcp-server"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "comment": "Enable if you work with AWS architecture diagrams. Requires 'uv' package manager"
+    },
+    
+    "github": {
+      "disabled": false,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_GITHUB_TOKEN>"
+      },
+      "comment": "Get token from: GitHub → Settings → Developer Settings → Personal Access Tokens → Generate new token (classic). Scopes: repo, user, read:org"
+    },
+    
+    "MCP_DOCKER": {
+      "disabled": true,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "mcp",
+        "gateway",
+        "run"
+      ],
+      "env": {
+        "LOCALAPPDATA": "<YOUR_LOCALAPPDATA_PATH>",
+        "ProgramData": "<YOUR_PROGRAMDATA_PATH>",
+        "ProgramFiles": "<YOUR_PROGRAMFILES_PATH>"
+      },
+      "comment": "Windows example. For Linux/Mac, remove env variables. Requires Docker Desktop/Engine running and MCP Gateway plugin installed"
+    },
+    
+    "ds-toolkit": {
+      "disabled": true,
+      "timeout": 120,
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-ds-toolkit-server"
+      ],
+      "env": {},
+      "comment": "Enable for data science work. Requires 'uv' package manager and Python 3.8+. Timeout increased for data processing"
+    }
+  }
+}
