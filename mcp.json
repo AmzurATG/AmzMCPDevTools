@@ -1,0 +1,141 @@
+{
+  "servers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"],
+      "type": "stdio"
+    },
+    
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "type": "stdio"
+    },
+   
+    "redis-cache": {
+      "command": "uvx",
+      "args": ["redis-mcp-server", "--url", "redis://localhost:6379"],
+      "env": {
+        "REDIS_HOST": "localhost",
+        "REDIS_PORT": "6379"
+      },
+      "type": "stdio"
+    },
+    "postgres-diagnostics": {
+      "command": "npx",
+      "args": ["-y", "@henkey/postgres-mcp-server"],
+      "env": {
+        "DATABASE_URL": "Database url"
+      },
+      "type": "stdio"
+    },
+    "lighthouse": {
+      "command": "npx",
+      "args": ["-y", "@danielsogl/lighthouse-mcp"],
+      "type": "stdio"
+    },
+  
+    "sequentialThinking": {
+      "command": "uvx",
+      "args": ["sequential-thinking-mcp"],
+      "description": "Process flow and sequence modeling server for state management and event tracing.",
+      "env": {},
+      "type": "stdio"
+    },
+    "vitest": {
+      "command": "npx",
+      "args": ["-y", "@djankies/vitest-mcp"],
+      "disabled": false,
+      "autoApprove": [],
+      "type": "stdio"
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "Supabase access token"
+      },
+      "type": "stdio"
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "type": "stdio"
+    },
+   
+    
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgres/supabase database url"],
+      "type": "stdio"
+    },
+    "kroki": {
+      "command": "npx",
+      "args": ["-y", "@tkoba1974/mcp-kroki"],
+      "env": {},
+      "type": "stdio"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "directory path"],
+      "type": "stdio"
+    },
+   
+  "awslabs.aws-diagram-mcp-server": {
+  "disabled": false,
+  "timeout": 60,
+  "type": "stdio",
+  "command": "uv",
+  "args": [
+    "tool",
+    "run",
+    "--from",
+    "awslabs.aws-diagram-mcp-server",
+    "awslabs-aws-diagram-mcp-server"
+  ],
+  "env": {
+    "FASTMCP_LOG_LEVEL": "ERROR"
+  }
+},
+    "github": {
+      "disabled": false,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "Your GitHub personal access token"
+      }
+    },
+    "MCP_DOCKER": {
+      "disabled": false,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "mcp",
+        "gateway",
+        "run"
+      ],
+      "env": {
+        "LOCALAPPDATA": "C:\\Users\\your username\\AppData\\Local",
+        "ProgramData": "C:\\ProgramData",
+        "ProgramFiles": "C:\\Program Files"
+      }
+    },
+    "ds-toolkit": {
+      "disabled": false,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-ds-toolkit-server"
+      ],
+      "env": {}
+    }
+   
+  }
+}
