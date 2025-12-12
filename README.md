@@ -1,803 +1,381 @@
-# AmzMCPDevTools
-# MCP Server Configuration Guide
+# 🚀 AmzMCPDevTools
 
-This guide details how to configure Model Context Protocol (MCP) servers for Cursor and VS Code. It covers file locations, configuration steps, and specific setup details for essential MCP tools.
+> **Comprehensive MCP (Model Context Protocol) Configuration Toolkit for AI-Powered Development**
+
+A curated collection of MCP server configurations, role-specific guides, and workflow examples to supercharge your AI coding assistant (Cursor, VS Code Copilot) with powerful external tool integrations.
+
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](./CHANGELOG.md)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![Last Updated](https://img.shields.io/badge/updated-Dec%202025-orange.svg)](./CHANGELOG.md)
 
 ---
 
-## � What is MCP?
+## 📋 Table of Contents
 
-**Model Context Protocol (MCP)** is a standardized protocol that enables AI assistants and development tools to interact with external services, tools, and APIs in a consistent manner. Think of it as a bridge that allows AI models to access and utilize various functionalities provided by different tools and services.
+- [What is MCP?](#-what-is-mcp)
+- [What's Included](#-whats-included)
+- [Quick Start](#-quick-start)
+- [Role-Specific Guides](#-role-specific-guides)
+- [MCP Servers Included](#-mcp-servers-included)
+- [Project Structure](#-project-structure)
+- [Tools & Scripts](#-tools--scripts)
+- [Contributing](#-contributing)
+- [Resources](#-resources)
+
+---
+
+## 🎯 What is MCP?
+
+**Model Context Protocol (MCP)** is a standardized protocol that enables AI assistants like Cursor and GitHub Copilot to interact with external services, databases, APIs, and tools. Think of it as giving your AI superpowers!
 
 ### Key Benefits
 
-- **Standardized Interface**: Common protocol for all integrations
-- **Seamless Integration**: Easy connection between AI tools and external services
-- **Enhanced Capabilities**: Extends AI functionality beyond basic interactions
-- **Tool Discovery**: Enables AI to discover and use available tools dynamically
+- 🔌 **Extended Capabilities**: Access databases, browsers, containers, and more
+- 🎯 **Workflow Integration**: Combine multiple tools for complex tasks
+- 🚀 **Productivity Boost**: Automate repetitive tasks and streamline development
+- 🔍 **Context Awareness**: AI understands your entire development environment
 
 ---
 
-## �📂 1. Opening the Configuration File (mcp.json)
+## 📦 What's Included
 
-### For Cursor Users
-Cursor uses a global configuration file usually located in your home directory.
+### 📚 Comprehensive Documentation
 
-#### Windows:
-- **GUI**: Go to **Settings** (Gear Icon) → **Features** → **MCP** → Click "**Open config file**".
-- **Manual**: Open `%USERPROFILE%\.cursor\mcp.json` in any editor.
+- **Technical Guide** ([TECHNICAL_GUIDE.md](TECHNICAL_GUIDE.md)): 1000+ lines covering all 16 MCP servers
+- **Role-Specific Guides**: Optimized configurations for different developer roles
+- **Workflow Examples**: 8 real-world end-to-end scenarios
+- **FAQ**: 40+ common questions answered
 
-#### macOS / Linux:
-- **GUI**: Go to **Cursor Settings** → **General** → **MCP** → Click "**Open config file**".
-- **Manual**: Open `~/.cursor/mcp.json` in the terminal or editor.
+### ⚙️ Configuration Files
 
-### For VS Code Users
-VS Code typically manages MCP servers via the "VS Code MCP" extension or a workspace-specific file.
+- **mcp.json**: Production-ready configuration with all 16 servers
+- **mcp.json.template**: Template with placeholders for team sharing
 
-#### Global Config (All OS):
-1. Press `Cmd+Shift+P` (Mac) or `Ctrl+Shift+P` (Win/Linux).
-2. Type "**MCP: Open User Configuration**".
+### 🛠️ Tools & Scripts
 
-#### Workspace Config:
-- Create a file inside your project folder: `.vscode/mcp.json`.
+- **health-check.sh**: Validate your MCP setup and dependencies
+- Automated checks for configuration, dependencies, and performance
 
-#### Alternative: Direct File Access
+### 🎓 Learning Resources
 
-If the above methods don't work or you prefer manual configuration, you can directly access the MCP configuration file:
-
-**Windows:**
-- Open: `C:\Users\[Your_Username]\AppData\Roaming\Code\User\mcp.json`
-- If the file doesn't exist, create a new file named `mcp.json` at: `C:\Users\[Your_Username]\AppData\Roaming\Code\User\`
-
-**macOS:**
-- Open: `~/Library/Application Support/Code/User/mcp.json`
-- If the file doesn't exist, create a new file named `mcp.json` at: `~/Library/Application Support/Code/User/`
-
-**Linux:**
-- Open: `~/.config/Code/User/mcp.json`
-- If the file doesn't exist, create a new file named `mcp.json` at: `~/.config/Code/User/`
-
-**💡 Tip for Windows Users:**
-- To access the `AppData` folder, press `Win + R`, type `%APPDATA%`, and press Enter. This will open `C:\Users\[Your_Username]\AppData\Roaming\`.
-- Navigate to `Code\User\` folder from there.
-- If you don't see the `AppData` folder in File Explorer, enable "Show hidden files" in View options.
-
-#### Troubleshooting: Can't Find mcp.json?
-
-**Issue: File doesn't exist**
-- **Solution**: MCP configuration is optional and won't exist until you create it. Simply create a new file named `mcp.json` in the appropriate location listed above, then add the basic JSON structure from Section 2.
-
-**Issue: AppData folder is hidden (Windows)**
-- **Solution**: 
-  1. Open File Explorer
-  2. Click **View** → **Show** → Check "**Hidden items**"
-  3. Or use the direct path by pressing `Win + R`, typing `%APPDATA%\Code\User`, and pressing Enter
-
-**Issue: Command Palette doesn't show "MCP: Open User Configuration"**
-- **Solution**: This means the MCP extension or integration may not be installed/enabled. You have two options:
-  1. **Install the MCP extension**: Press `Ctrl+Shift+X`, search for "MCP" or "Model Context Protocol", and install the official extension
-  2. **Manual configuration**: Create the `mcp.json` file manually using the direct file access method above
-
-**Issue: VS Code version too old**
-- **Solution**: 
-  - MCP support requires VS Code version **1.85.0 or higher**
-  - Check your version: Help → About
-  - Update VS Code: Help → Check for Updates
-  - Or download the latest version from [code.visualstudio.com](https://code.visualstudio.com/)
-
-**Issue: Settings not taking effect**
-- **Solution**: 
-  1. Ensure the JSON syntax is valid (no trailing commas, proper quotes)
-  2. Restart VS Code completely after creating or modifying `mcp.json`
-  3. Use `Ctrl+Shift+P` → "Reload Window" to reload without closing VS Code
-  4. Check the Output panel (`Ctrl+Shift+U`) → Select "MCP" from the dropdown to see error messages
-
-**Issue: Multiple VS Code installations (Stable vs Insiders)**
-- **Solution**: Each VS Code version has its own config location:
-  - **Stable**: `...\Code\User\mcp.json`
-  - **Insiders**: `...\Code - Insiders\User\mcp.json`
-  - Make sure you're editing the correct one for your VS Code version
+- Step-by-step setup for Windows, macOS, and Linux
+- Troubleshooting guides for each MCP server
+- Security best practices and performance optimization tips
 
 ---
 
-## ⚙️ 2. Basic Configuration Structure
+## ⚡ Quick Start
 
-Add the following JSON structure to your `mcp.json` file. The `servers` object will contain the definitions for each tool you want to connect.
+### 1. Clone the Repository
 
-```json
-{
-  "servers": {
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/folder"],
-      "type": "stdio"
-    },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "your_token_here"
-      },
-      "type": "stdio"
-    }
-  }
-}
+```bash
+git clone https://github.com/AmzurATG/AmzMCPDevTools.git
+cd AmzMCPDevTools
 ```
 
-## ⚠️ Important Notice
+### 2. Choose Your Path
 
-**Tool Availability Disclaimer**: The tools listed in this documentation are representative examples based on typical MCP server implementations. Each server may have **more or fewer tools** than documented here, and tool names/functionality may vary depending on the server version.
+**Option A: Copy Complete Configuration**
+```bash
+# For Cursor
+cp mcp.json ~/.cursor/mcp.json
 
-### How to View Available Tools
+# For VS Code (Linux)
+cp mcp.json ~/.config/Code/User/mcp.json
 
-After connecting an MCP server, you can view its actual tool list:
-
-**In Cursor:**
-1. Click on the **Settings** icon (gear icon) in the bottom left
-2. Navigate to **Cursor Settings** → **Tools & MCP** → you'll see all connected servers with no.of available tools.
-3. Click on a server name to view its available tools and descriptions
-
-**In VS Code:**
-1. **Quick Access (Easiest)**: Click the **Configure Tools icon** (wrench icon) in the GitHub Copilot chat interface where you type prompts
-   - This will show all connected MCP servers and their available tools
-   - You can enable/disable specific servers and tools from this interface
-2. **Command Palette**: Open **Command Palette** (`Ctrl+Shift+P` or `Cmd+Shift+P`)
-   - Type and select **"MCP: Show Available Tools"**
-   - Select the server to view its tool list
-3. **Status Bar**: Check the **MCP Status** in the status bar (bottom right) for connection status
-
-### ⚠️ Performance Warning
-
-**Tool Selection Limits:**
-- **Cursor**: Performance may degrade if you enable more than **80 tools** across all servers
-- **VS Code**: Performance may degrade if you enable more than **128 tools** across all servers
-
-**Recommendation**: Only enable the MCP servers and tools you actively need for your current workflow. Disable unused servers to maintain optimal performance.
-
----
-
-## 🛠️ 3. Essential MCP Server Details
-
-### A. Filesystem MCP
-
-#### 1. What is it?
-Allows the AI to read, write, and list files and directories on your local computer that are outside of the currently open project window.
-
-#### 2. Why use it?
-Standard AI editors can only see the current project. Use this if you need the AI to reference docs, logs, or code from another project folder without opening it.
-
-#### 3. Configuration Example
-```json
-"filesystem": {
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-filesystem", "D:\\Itrackermcptest\\PM-Tool"],
-  "type": "stdio"
-}
+# For VS Code (macOS)
+cp mcp.json ~/Library/Application\ Support/Code/User/mcp.json
 ```
 
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@modelcontextprotocol/server-filesystem`, `[path1]`, `[path2]`
-- **Credentials**: None required.
-- **Note**: You must explicitly list every folder path you want the AI to access in the args list.
+**Option B: Use Role-Specific Configuration**
 
-#### 5. Troubleshooting
-**Issue**: "Access Denied" or AI says it cannot see the file.
-- **Solution**: Ensure the absolute path is correctly added to the `args` array in `mcp.json`. Restart the IDE after changing paths.
+Choose the guide that matches your role:
+- 🎨 [Frontend Developer](guides/frontend-developer-setup.md)
+- ⚙️ [Backend Developer](guides/backend-developer-setup.md)
+- 🧪 [QA/Testing Engineer](guides/qa-testing-setup.md)
+- 📊 [Data Scientist](guides/data-scientist-setup.md)
 
-**Issue**: Windows Path errors.
-- **Solution**: Use double backslashes `\\` or forward slashes `/` in JSON (e.g., `"C:/Users/Name/Projects"` or `"C:\\Users\\Name\\Projects"`).
+### 3. Customize Configuration
 
-#### 6. Use Case Example
-> "Check the logs.txt file in my D:/server-logs folder and tell me if there are any error timestamps matching the bug in my current project."
+Edit your `mcp.json` and replace placeholders:
+- `<YOUR_GITHUB_TOKEN>` → Your GitHub personal access token
+- `<YOUR_POSTGRES_URL>` → Your PostgreSQL connection string
+- `<ABSOLUTE_PATH>` → Actual directory paths
+- Other credential placeholders
 
----
+### 4. Install Dependencies
 
-### B. GitHub MCP
+```bash
+# Core dependencies
+node --version  # Ensure Node.js v16+ is installed
+npm install -g npm@latest
 
-#### 1. What is it?
-Connects your AI directly to GitHub API to search repositories, read issues, inspect pull requests, and view file history remotely.
+# Optional: Python tools (for uvx/DS Toolkit)
+pip install uv
 
-#### 2. Why use it?
-To perform code reviews, generate release notes from PRs, or check an issue status without leaving your editor.
-
-#### 3. Configuration Example
-```json
-"github": {
-  "disabled": false,
-  "timeout": 60,
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-github"],
-  "env": {
-    "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_YOUR_TOKEN_HERE"
-  }
-}
+# Optional: Browser binaries
+npx playwright install
 ```
 
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@modelcontextprotocol/server-github`
-- **Credentials**: `GITHUB_PERSONAL_ACCESS_TOKEN`
-- **How to get it**: 
-  1. Go to GitHub → **Settings** → **Developer Settings** → **Personal Access Tokens (Classic)**.
-  2. Click "**Generate new token (classic)**".
-  3. **Scopes needed**: `repo`, `user`, `read:org`.
-  4. Copy the token immediately (it won't be shown again).
+### 5. Validate Setup
 
-#### 5. Troubleshooting
-**Issue**: "Bad Credentials" or 401 Unauthorized.
-- **Solution**: The token may have expired or permissions are too strict. Regenerate the token and ensure `repo` scope is checked.
-
-**Issue**: Rate Limiting.
-- **Solution**: The GitHub API has limits. If you make too many requests rapidly, wait an hour or use a token with higher limits.
-
-**Issue**: Token not recognized.
-- **Solution**: Ensure there are no extra spaces before/after the token in the JSON. Restart your IDE after adding the token.
-
-#### 6. Use Case Example
-> "Find the last 3 Pull Requests merged into the AmzurATG/PM-Tool repo and generate a summary of changes for the release notes."
-
----
-
-### C. PostgreSQL MCP
-
-#### 1. What is it?
-Connects your AI to a PostgreSQL database to query data, inspect schemas, and perform database operations directly from your editor.
-
-#### 2. Why use it?
-To analyze database performance, debug queries, inspect table structures, or generate reports without switching to a database client.
-
-**💡 Pro Tip**: You can also use PostgreSQL MCP to connect to **Supabase databases**. Simply use your Supabase database connection string (found in Project Settings → Database → Connection String → URI) instead of a local PostgreSQL URL.
-
-#### 3. Configuration Example
-```json
-"postgres": {
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://username:password@host:5432/database"],
-  "type": "stdio"
-}
+```bash
+./scripts/health-check.sh
 ```
 
-Or with separate host configuration:
-```json
-"postgres-diagnostics": {
-  "command": "npx",
-  "args": ["-y", "@henkey/postgres-mcp-server"],
-  "env": {
-    "DATABASE_URL": "postgresql://postgres:password@localhost:5432/amzurbot"
-  },
-  "type": "stdio"
-}
+### 6. Restart Your IDE
+
+- **VS Code/Cursor**: `Ctrl+Shift+P` → "Reload Window"
+- Or fully restart your IDE
+
+### 7. Test It Out
+
+Try these prompts in your AI assistant:
+- "List all connected MCP servers"
+- "Show me the files in [your configured path]"
+- "What's the latest issue in [your GitHub repo]?"
+
+---
+
+## 👥 Role-Specific Guides
+
+Each guide includes:
+- ✅ Recommended MCP servers for your role
+- 📊 Tool count estimates (all under performance limits)
+- 🎯 Common use cases and workflows
+- 🔧 Role-specific troubleshooting
+- 💡 Pro tips and best practices
+
+### 🎨 Frontend Developer
+**Servers**: Playwright, Lighthouse, Chrome DevTools, Vitest, GitHub, Filesystem  
+**Focus**: UI testing, performance audits, browser automation  
+**Tools**: ~50-60 (well under 80 limit)
+
+[📖 Read Guide →](guides/frontend-developer-setup.md)
+
+---
+
+### ⚙️ Backend Developer
+**Servers**: PostgreSQL, Redis, Supabase, Docker, GitHub, Filesystem, Sequential Thinking  
+**Focus**: Database ops, caching, API development, containers  
+**Tools**: ~60-70 (well under 80 limit)
+
+[📖 Read Guide →](guides/backend-developer-setup.md)
+
+---
+
+### 🧪 QA/Testing Engineer
+**Servers**: Playwright, Puppeteer, Lighthouse, Chrome DevTools, Vitest, GitHub  
+**Focus**: Cross-browser testing, performance testing, automation  
+**Tools**: ~55-65 (well under 80 limit)
+
+[📖 Read Guide →](guides/qa-testing-setup.md)
+
+---
+
+### 📊 Data Scientist
+**Servers**: DS Toolkit, PostgreSQL, Redis, Kroki, GitHub, Filesystem  
+**Focus**: Data analysis, statistical computing, ML workflows  
+**Tools**: ~50-60 (well under 80 limit)
+
+[📖 Read Guide →](guides/data-scientist-setup.md)
+
+---
+
+## 🔧 MCP Servers Included
+
+| Server | Purpose | Command | When to Use |
+|--------|---------|---------|-------------|
+| **Filesystem** | Access external directories | `npx` | Reference code/docs outside project |
+| **GitHub** | Repository, PR, issue management | `npx` | Code reviews, release notes |
+| **PostgreSQL** | Database queries & analysis | `npx` | Data analysis, debugging queries |
+| **Redis** | Cache inspection & management | `uvx` | Cache debugging, performance |
+| **Supabase** | Backend-as-a-service operations | `npx` | Supabase project management |
+| **Playwright** | Cross-browser automation | `npx` | Multi-browser testing |
+| **Puppeteer** | Chrome automation | `npx` | Fast Chrome-only testing |
+| **Lighthouse** | Performance & accessibility audits | `npx` | Pre-deployment validation |
+| **Chrome DevTools** | Network & performance debugging | `npx` | API debugging, performance |
+| **Vitest** | JavaScript/TypeScript testing | `npx` | Unit/component test analysis |
+| **Sequential Thinking** | Workflow & state modeling | `uvx` | Complex process design |
+| **Kroki** | Diagram generation | `npx` | Architecture diagrams |
+| **AWS Diagram** | AWS architecture visualization | `uv` | Cloud infrastructure docs |
+| **Docker MCP** | Container management | `docker` | Container debugging |
+| **DS Toolkit** | Data science operations | `uvx` | Statistical analysis, ML |
+
+**Total**: 16 MCP servers, 150+ tools available
+
+---
+
+## 📁 Project Structure
+
 ```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@modelcontextprotocol/server-postgres`, `[connection_string]`
-- **Credentials**: PostgreSQL connection string with format:
-  - `postgresql://[username]:[password]@[host]:[port]/[database]`
-- **Alternative**: Use `DATABASE_URL` environment variable instead of inline connection string.
-
-#### 5. Troubleshooting
-**Issue**: "Connection refused" or "ECONNREFUSED".
-- **Solution**: Ensure PostgreSQL is running. Check if the host and port are correct (default: `localhost:5432`).
-
-**Issue**: "Authentication failed".
-- **Solution**: Verify username and password. Ensure the user has appropriate permissions on the database.
-
-**Issue**: "Database does not exist".
-- **Solution**: Create the database first using `createdb [database_name]` or verify the database name in your connection string.
-
-**Issue**: SSL/TLS errors.
-- **Solution**: Add `?sslmode=disable` to the connection string for local development: `postgresql://user:pass@localhost:5432/db?sslmode=disable`
-
-#### 6. Use Case Example
-> "Show me all tables in my amzurbot database and explain the schema of the 'users' table. Then write a query to find all inactive users."
-
----
-
-### D. Supabase MCP
-
-#### 1. What is it?
-Connects your AI to Supabase projects, enabling database queries, authentication management, and API operations through the Supabase platform.
-
-#### 2. Why use it?
-To manage Supabase projects, query your database, inspect auth users, and manage storage buckets without leaving your editor.
-
-#### 3. Configuration Example
-```json
-"supabase": {
-  "command": "npx",
-  "args": ["-y", "@supabase/mcp-server-supabase@latest"],
-  "env": {
-    "SUPABASE_ACCESS_TOKEN": "sbp_your_token_here"
-  },
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@supabase/mcp-server-supabase@latest`
-- **Credentials**: `SUPABASE_ACCESS_TOKEN`
-- **How to get it**:
-  1. Go to [Supabase Dashboard](https://app.supabase.com)
-  2. Click on your profile → **Account Preferences** → **Access Tokens**
-  3. Click "**Generate new token**"
-  4. Give it a name and copy the token immediately
-
-#### 5. Troubleshooting
-**Issue**: "Invalid access token".
-- **Solution**: Regenerate the token and ensure it's correctly pasted in the `env` section. Tokens start with `sbp_`.
-
-**Issue**: "Project not found".
-- **Solution**: Ensure you're using the correct project reference. The token must have access to the project you're querying.
-
-#### 6. Use Case Example
-> "List all tables in my Supabase project and show me the row count for the 'profiles' table."
-
----
-
-### E. Puppeteer MCP (Web Automation)
-
-#### 1. What is it?
-Provides headless browser automation capabilities, allowing the AI to navigate websites, take screenshots, and extract content.
-
-#### 2. Why use it?
-To scrape web data, test web applications, capture screenshots for documentation, or automate repetitive browser tasks. **Particularly useful for smoke testing** - quickly verify critical user flows (login, checkout, form submission) are working after deployments.
-
-#### 3. Configuration Example
-```json
-"puppeteer": {
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@modelcontextprotocol/server-puppeteer`
-- **Credentials**: None required.
-- **Dependencies**: Node.js must be installed.
-
-#### 5. Troubleshooting
-**Issue**: "Browser download failed".
-- **Solution**: Run `npx puppeteer browsers install chrome` manually to download Chromium.
-
-**Issue**: "Page timeout".
-- **Solution**: Slow websites may timeout. The AI can adjust timeout settings in the automation script.
-
-#### 6. Use Case Example
-> "Navigate to example.com, take a screenshot of the homepage, and extract all the h1 headings."
-
----
-
-### F. Playwright MCP (Advanced Web Automation)
-
-#### 1. What is it?
-Similar to Puppeteer but with multi-browser support (Chromium, Firefox, WebKit) and advanced testing capabilities.
-
-#### 2. Why use it?
-For cross-browser testing, more reliable web scraping, or when you need WebKit (Safari) engine support.
-
-#### 3. Configuration Example
-```json
-"playwright": {
-  "command": "npx",
-  "args": ["-y", "@playwright/mcp@latest"],
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@playwright/mcp@latest`
-- **Credentials**: None required.
-
-#### 5. Troubleshooting
-**Issue**: "Browsers not installed".
-- **Solution**: Run `npx playwright install` to download browser binaries.
-
-**Issue**: "Browser executable not found".
-- **Solution**: Ensure sufficient disk space and permissions. Try `npx playwright install --with-deps` on Linux.
-
-#### 6. Use Case Example
-> "Test my login form at localhost:3000/login in both Chrome and Firefox, and report any differences."
-
----
-
-
-
-### H. Redis Cache MCP
-
-#### 1. What is it?
-Connects your AI to a Redis instance for cache inspection, key management, and performance monitoring.
-
-#### 2. Why use it?
-To debug caching issues, inspect cached data, monitor Redis memory usage, or manage cache invalidation.
-
-#### 3. Configuration Example
-```json
-"redis-cache": {
-  "command": "uvx",
-  "args": ["redis-mcp-server", "--url", "redis://localhost:6379"],
-  "env": {
-    "REDIS_HOST": "localhost",
-    "REDIS_PORT": "6379"
-  },
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `uvx`
-- **Args**: `redis-mcp-server`, `--url`, `redis://[host]:[port]`
-- **Credentials**: If Redis requires authentication, use format: `redis://:password@host:port`
-- **Environment Variables**:
-  - `REDIS_HOST`: Redis server hostname
-  - `REDIS_PORT`: Redis server port (default: 6379)
-
-#### 5. Troubleshooting
-**Issue**: "Connection refused".
-- **Solution**: Ensure Redis is running. Start it with `redis-server` on Linux/Mac or via Windows service.
-
-**Issue**: "Authentication required".
-- **Solution**: Include password in URL: `redis://:your_password@localhost:6379`
-
-**Issue**: "uvx not found".
-- **Solution**: Install `uv` package manager: `pip install uv`
-
-#### 6. Use Case Example
-> "Show me all keys in my Redis cache that start with 'user_session' and check the TTL for each one."
-
----
-
-
-
-### J. Lighthouse MCP (Web Performance)
-
-#### 1. What is it?
-Runs Google Lighthouse audits to analyze web performance, accessibility, SEO, and best practices.
-
-#### 2. Why use it?
-To get automated performance reports, identify optimization opportunities, or validate web standards compliance.
-
-#### 3. Configuration Example
-```json
-"lighthouse": {
-  "command": "npx",
-  "args": ["-y", "@danielsogl/lighthouse-mcp"],
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@danielsogl/lighthouse-mcp`
-- **Credentials**: None required.
-
-#### 5. Troubleshooting
-**Issue**: "Chrome not found".
-- **Solution**: Lighthouse requires Chrome/Chromium. Install Google Chrome or set `CHROME_PATH` environment variable.
-
-**Issue**: "Audit timeout".
-- **Solution**: Ensure the target URL is accessible and responsive. Local development servers must be running.
-
-#### 6. Use Case Example
-> "Run a Lighthouse audit on http://localhost:3000 and give me the top 3 performance improvements I should make."
-
----
-
-### K. Kroki MCP (Diagram Generation)
-
-#### 1. What is it?
-Generates diagrams from text descriptions using various formats (PlantUML, Mermaid, GraphViz, etc.) via the Kroki API.
-
-#### 2. Why use it?
-To create architecture diagrams, flowcharts, sequence diagrams, or ERD diagrams without leaving your editor.
-
-#### 3. Configuration Example
-```json
-"kroki": {
-  "command": "npx",
-  "args": ["-y", "@tkoba1974/mcp-kroki"],
-  "env": {},
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@tkoba1974/mcp-kroki`
-- **Credentials**: None required (uses public Kroki service).
-- **Optional**: Set `KROKI_URL` environment variable to use a self-hosted Kroki instance.
-
-#### 5. Troubleshooting
-**Issue**: "Service unavailable".
-- **Solution**: The public Kroki service may be temporarily down. Try again later or set up a local Kroki instance.
-
-**Issue**: "Invalid diagram syntax".
-- **Solution**: The AI will help fix syntax errors. Ensure you're using the correct diagram format (e.g., PlantUML, Mermaid).
-
-#### 6. Use Case Example
-> "Create a sequence diagram showing the authentication flow in my application: User → Frontend → API → Database. Use download_diagram tool."
-
----
-
-### L. Sequential Thinking MCP
-
-#### 1. What is it?
-Provides structured process flow and sequence modeling for complex state management and event tracing.
-
-#### 2. Why use it?
-To model complex workflows, trace event sequences, or debug state management issues in your application.
-
-#### 3. Configuration Example
-```json
-"sequentialThinking": {
-  "command": "uvx",
-  "args": ["sequential-thinking-mcp"],
-  "description": "Process flow and sequence modeling server for state management and event tracing.",
-  "env": {},
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `uvx`
-- **Args**: `sequential-thinking-mcp`
-- **Credentials**: None required.
-- **Prerequisites**: Install `uv` package manager.
-
-#### 5. Troubleshooting
-**Issue**: "uvx not found".
-- **Solution**: Install `uv`: `pip install uv` or download from [astral.sh](https://astral.sh).
-
-#### 6. Use Case Example
-> "Model the state transitions in my shopping cart feature from 'empty' to 'checked out' and identify potential edge cases."
-
----
-
-### M. Vitest MCP (JavaScript Testing)
-
-#### 1. What is it?
-Integrates Vitest testing framework with your AI for running tests, analyzing coverage, and debugging test failures.
-
-#### 2. Why use it?
-To run specific tests, analyze test failures, generate new test cases, or improve test coverage.
-
-#### 3. Configuration Example
-```json
-"vitest": {
-  "command": "npx",
-  "args": ["-y", "@djankies/vitest-mcp"],
-  "disabled": false,
-  "autoApprove": [],
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `-y`, `@djankies/vitest-mcp`
-- **Credentials**: None required.
-- **Prerequisites**: Project must have Vitest installed and configured.
-
-#### 5. Troubleshooting
-**Issue**: "Vitest not found in project".
-- **Solution**: Install Vitest: `npm install -D vitest` or ensure it's in your package.json.
-
-**Issue**: "No tests found".
-- **Solution**: Ensure test files follow Vitest naming conventions (*.test.js, *.spec.js) and are in the correct directory.
-
-#### 6. Use Case Example
-> "Run all tests in my src/components/ folder and explain why the Button.test.tsx is failing."
-
----
-
-### N. AWS Diagram MCP
-
-#### 1. What is it?
-Generates AWS architecture diagrams from text descriptions or existing infrastructure code.
-
-#### 2. Why use it?
-To visualize AWS infrastructure, document cloud architecture, or plan new deployments.
-
-#### 3. Configuration Example
-```json
-"awslabs.aws-diagram-mcp-server": {
-  "disabled": false,
-  "timeout": 60,
-  "type": "stdio",
-  "command": "uv",
-  "args": [
-    "tool",
-    "run",
-    "--from",
-    "awslabs.aws-diagram-mcp-server",
-    "awslabs-aws-diagram-mcp-server"
-  ],
-  "env": {
-    "FASTMCP_LOG_LEVEL": "ERROR"
-  }
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `uv`
-- **Args**: `tool`, `run`, `--from`, `awslabs.aws-diagram-mcp-server`, `awslabs-aws-diagram-mcp-server`
-- **Credentials**: None required for diagram generation.
-- **Prerequisites**: Install `uv` package manager.
-
-#### 5. Troubleshooting
-**Issue**: "Command not found".
-- **Solution**: Install `uv` package manager: `pip install uv` or from [astral.sh](https://astral.sh).
-
-**Issue**: "Timeout errors".
-- **Solution**: Increase the `timeout` value in the config (default shown is 60 seconds).
-
-#### 6. Use Case Example
-> "Create an AWS architecture diagram for a three-tier web application with EC2, RDS, and S3."
-
----
-
-### O. Chrome DevTools MCP
-
-#### 1. What is it?
-Provides Chrome DevTools integration for debugging, profiling, and inspecting web applications.
-
-#### 2. Why use it?
-To capture network requests, analyze performance metrics, debug JavaScript, or inspect DOM elements programmatically.
-
-#### 3. Configuration Example
-```json
-"chrome-devtools": {
-  "command": "npx",
-  "args": ["chrome-devtools-mcp@latest"],
-  "type": "stdio"
-}
-```
-
-#### 4. Credentials & Setup
-- **Command**: `npx`
-- **Args**: `chrome-devtools-mcp@latest`
-- **Credentials**: None required.
-
-#### 5. Troubleshooting
-**Issue**: "Chrome not found".
-- **Solution**: Install Google Chrome and ensure it's in your system PATH.
-
-**Issue**: "Cannot connect to browser".
-- **Solution**: Ensure no other processes are using Chrome's debugging port (default: 9222).
-
-#### 6. Use Case Example
-> "Analyze the network requests when I load localhost:3000 and identify which API calls are slowest."
-
----
-
-## 🔧 4. General Troubleshooting Guide
-
-### Common Issues Across All MCP Servers
-
-#### Issue: "Server failed to start" or "Process exited with code 1"
-**Solutions**:
-1. Verify the command (`npx`, `uvx`, etc.) is installed and in your system PATH
-2. Check that Node.js is installed (for `npx` commands): `node --version`
-3. For `uvx` commands, install `uv`: `pip install uv`
-4. Restart your IDE after installing dependencies
-5. Check the IDE's output panel for detailed error messages
-
-#### Issue: "PATH not found" (Windows)
-**Solutions**:
-1. Add Node.js to system PATH:
-   - Right-click **This PC** → **Properties** → **Advanced system settings**
-   - Click **Environment Variables**
-   - Under **System variables**, select **Path** → **Edit**
-   - Add: `C:\Program Files\nodejs\`
-2. Restart your computer after modifying PATH
-3. Verify in Command Prompt: `node --version` and `npx --version`
-
-#### Issue: Port Conflicts
-**Solutions**:
-1. Check if the port is already in use:
-   - Windows: `netstat -ano | findstr :[PORT]`
-   - Linux/Mac: `lsof -i :[PORT]`
-2. Kill the process or change the port in your MCP config
-3. Common ports: Redis (6379), PostgreSQL (5432), Prometheus (9090)
-
-#### Issue: Permission Denied (Linux/Mac)
-**Solutions**:
-1. Avoid using `sudo` with MCP servers
-2. Install Node.js using a version manager like `nvm` (gives user-level permissions)
-3. Fix npm permissions: `npm config set prefix ~/.npm-global`
-4. Add to PATH: `export PATH=~/.npm-global/bin:$PATH`
-
----
-
-## 📝 5. Complete Configuration Example
-
-Here's a full example combining multiple MCP servers:
-
-```json
-{
-  "servers": {
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "D:/Projects"],
-      "type": "stdio"
-    },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
-      },
-      "type": "stdio"
-    },
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:pass@localhost:5432/mydb"],
-      "type": "stdio"
-    },
-    "puppeteer": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
-      "type": "stdio"
-    },
-    "redis-cache": {
-      "command": "uvx",
-      "args": ["redis-mcp-server", "--url", "redis://localhost:6379"],
-      "type": "stdio"
-    }
-  }
-}
+AmzMCPDevTools/
+├── README.md                    # Project overview and quick start
+├── TECHNICAL_GUIDE.md           # Complete technical reference (1000+ lines)
+├── CHANGELOG.md                 # Version history and updates
+├── mcp.json                     # Production configuration (all 16 servers)
+├── mcp.json.template            # Template with placeholders
+├── guides/
+│   ├── README.md                # Guides overview
+│   ├── frontend-developer-setup.md
+│   ├── backend-developer-setup.md
+│   ├── qa-testing-setup.md
+│   ├── data-scientist-setup.md
+│   └── workflow-examples.md     # 8 end-to-end scenarios
+└── scripts/
+    └── health-check.sh          # Configuration validator
 ```
 
 ---
 
-## 🚀 6. Testing Your Configuration
+## 🛠️ Tools & Scripts
 
-After setting up your MCP servers:
+### Health Check Script
 
-1. **Restart your IDE** (Cursor or VS Code): ctrl+shift+P → Reload Window
-2. **Check the status**: Look for MCP indicators in the status bar
-3. **Test with a simple prompt**:
-   - For Filesystem: "List all files in [your configured path]"
-   - For GitHub: "What's the latest issue in [your repo]?"
-   - For PostgreSQL: "Show me all tables in my database"
+Validates your MCP configuration:
 
-4. **View logs**: If something fails, check:
-   - **Cursor**: Settings → Features → MCP → View logs
-   - **VS Code**: Output panel → Select "MCP" from dropdown
+```bash
+./scripts/health-check.sh
+```
+
+**Checks**:
+- ✅ Configuration file existence and syntax
+- ✅ Node.js, Python, Docker installation
+- ✅ PostgreSQL, Redis service status
+- ✅ Browser binaries (Playwright, Puppeteer)
+- ✅ Tool count vs. performance limits
+- ⚠️ Configuration warnings and issues
+
+**Output Example**:
+```
+╔══════════════════════════════════════════════════════╗
+║     MCP Configuration Health Check                   ║
+╚══════════════════════════════════════════════════════╝
+
+[1/8] Checking MCP Configuration File...
+✓ Found Cursor config: /home/user/.cursor/mcp.json
+
+[2/8] Validating JSON Syntax...
+✓ JSON syntax is valid
+
+[3/8] Checking Core Dependencies...
+✓ Node.js installed: v20.10.0
+✓ npx available
+✓ Python installed: Python 3.11.5
+
+...
+
+✓ All checks passed!
+Your MCP configuration is healthy and ready to use.
+```
 
 ---
 
-## 📚 7. Additional Resources
+## 🚀 Workflow Examples
 
-- [Model Context Protocol Documentation](https://modelcontextprotocol.io/)
+[**See guides/workflow-examples.md**](guides/workflow-examples.md) for 8 complete scenarios:
+
+1. **Debug Production Issue** - Trace slow API with DevTools, PostgreSQL, Redis
+2. **Pre-Deployment Validation** - Test suite, performance audits, DB checks
+3. **API Development** - Design, test, document new endpoints
+4. **Data Pipeline Analysis** - Debug data quality issues
+5. **Performance Optimization** - Improve page load from 4s to <2s
+6. **Security Audit** - Comprehensive security review
+7. **A/B Test Analysis** - Statistical analysis and visualization
+8. **Incident Response** - Handle production emergencies
+
+---
+
+## 📊 Performance Guidelines
+
+### Tool Limits
+- **Cursor**: Best with <80 tools (6-8 servers)
+- **VS Code**: Best with <128 tools (10-12 servers)
+
+### All role-specific configurations are optimized to stay under these limits!
+
+### Tips
+- ✅ Only enable servers you actively use
+- ✅ Use `disabled: true` to temporarily turn off servers
+- ✅ Monitor tool count in IDE settings
+- ✅ Close unused browser instances
+- ✅ Run health check to validate setup
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/new-guide`
+3. **Add** your contribution:
+   - New MCP server documentation
+   - Role-specific guides
+   - Workflow examples
+   - Bug fixes or improvements
+4. **Test** your changes with the health check script
+5. **Commit**: `git commit -m "Add: New DevOps guide"`
+6. **Push**: `git push origin feature/new-guide`
+7. **Submit** a Pull Request
+
+### Contribution Ideas
+- 🎯 New role-specific guides (DevOps, Mobile, etc.)
+- 📝 Additional workflow examples
+- 🔧 New MCP server configurations
+- 🐛 Bug fixes and documentation improvements
+- 🌍 Translations
+
+---
+
+## 📚 Resources
+
+### Official Documentation
+- [Model Context Protocol](https://modelcontextprotocol.io/)
 - [MCP Server Registry](https://github.com/modelcontextprotocol/servers)
-- [Cursor MCP Guide](https://docs.cursor.com/advanced/mcp)
+- [Cursor Documentation](https://docs.cursor.com/advanced/mcp)
 - [VS Code MCP Extension](https://marketplace.visualstudio.com/items?itemName=modelcontextprotocol.mcp)
 
----
+### Community
+- [Awesome MCP Servers](https://github.com/punkpeye/awesome-mcp-servers)
+- [MCP Discord Community](https://discord.gg/modelcontextprotocol) (check official site for link)
 
-## 🤝 8. Contributing
-
-If you find issues with this guide or want to add more MCP servers, please contribute to the documentation!
-
----
-
-## ⚠️ 9. Security Best Practices
-
-1. **Never commit tokens**: Add `mcp.json` to `.gitignore` if it contains credentials
-2. **Use environment variables**: Store sensitive data outside of config files
-3. **Rotate tokens regularly**: Especially for GitHub and database credentials
-4. **Limit scope**: Only grant minimal required permissions to API tokens
-5. **Use readonly paths**: For filesystem MCP, only expose necessary directories
+### Learning
+- [Creating MCP Servers](https://modelcontextprotocol.io/docs/creating-servers)
+- [MCP Best Practices](https://modelcontextprotocol.io/docs/best-practices)
 
 ---
 
-**Last Updated**: December 11, 2025  
-**Version**: 1.0
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- Model Context Protocol team for the amazing protocol
+- Cursor and VS Code teams for AI integration
+- All MCP server maintainers
+- Community contributors
+
+---
+
+## 📧 Support
+
+- **Issues**: [GitHub Issues](https://github.com/AmzurATG/AmzMCPDevTools/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/AmzurATG/AmzMCPDevTools/discussions)
+- **Email**: support@amzuratg.com (if applicable)
+
+---
+
+## 🌟 Star History
+
+If this project helped you, please ⭐️ star it on GitHub!
+
+---
+
+**Last Updated**: December 12, 2025  
+**Version**: 2.0.0  
+**Maintained by**: [AmzurATG](https://github.com/AmzurATG)
 
